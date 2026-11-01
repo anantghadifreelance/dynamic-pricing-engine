@@ -1,0 +1,68 @@
+spring:
+  application:
+    name: dynamic-pricing-engine
+  datasource:
+    url: jdbc:h2:mem:pricing;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+  h2:
+    console:
+      enabled: true
+  cache:
+    type: simple
+    cache-names: quotes
+  # Redis is opt-in: it is switched back on by the 'redis' profile.
+  autoconfigure:
+    exclude: >-
+      org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration,
+      org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+  mvc:
+    problemdetails:
+      enabled: true
+
+pricing:
+  currency: INR
+  default-margin-percent: 25
+  min-margin-percent: 8
+  gst-percent: 18
+  tiers:
+    - min-quantity: 10
+      discount-percent: 2
+    - min-quantity: 50
+      discount-percent: 5
+    - min-quantity: 100
+      discount-percent: 8
+  freight:
+    slabs:
+      - max-weight-kg: 0.5
+        charge: 40
+      - max-weight-kg: 1
+        charge: 65
+      - max-weight-kg: 2
+        charge: 90
+      - max-weight-kg: 5
+        charge: 150
+    extra-per-kg: 25
+    zone-multipliers:
+      LOCAL: 1.0
+      REGIONAL: 1.3
+      NATIONAL: 1.6
+  marketplaces:
+    AMAZON:
+      commission-percent: 15
+      closing-fee: 20
+    FLIPKART:
+      commission-percent: 12
+      closing-fee: 25
+    OWN_STORE:
+      commission-percent: 2
+      closing-fee: 0
+  batch:
+    threads: 8
+    queue-capacity: 200
+    max-items: 100
+    timeout: 10s

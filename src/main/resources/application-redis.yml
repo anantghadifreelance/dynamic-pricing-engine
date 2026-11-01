@@ -1,0 +1,15 @@
+# Activate with: --spring.profiles.active=redis
+spring:
+  autoconfigure:
+    exclude: ""
+  cache:
+    type: redis
+    redis:
+      time-to-live: 10m
+      key-prefix: "pricing:"
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      repositories:
+        enabled: false
